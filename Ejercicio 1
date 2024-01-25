@@ -1,3 +1,9 @@
 #PD: perdida de memoria para la función exponencial
 
 #crear funcion X~Exp(d) para mas tarde guardar a los "sobrevivientes" 
+#
+
+#crear la función exponencial con parametro lambda
+Exponencial<-function(lambda){
+  paste(-lambda*log(1-runif(1)))
+}
