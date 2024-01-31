@@ -6,3 +6,9 @@ cuadrado_medio <- function(z){
   }
   paste(r^2)
 }
+while (is.null(z_n) ||  !any(duplicated(z_n))) {
+  print(as.numeric(tail(z_n , 1)))
+  z_n <- append(z_n,cuadrado_medio(as.numeric(tail(z_n , 1))))
+
+
+}
