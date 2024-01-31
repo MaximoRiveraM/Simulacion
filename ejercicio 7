@@ -1,0 +1,19 @@
+muestra_dados1 <- sample(c(1,2,3,4,5,6),size=1000,replace=TRUE, prob=c(2/7,1/7,1/7,1/7,1/7,1/7))
+muestra_dados6 <- sample(c(1,2,3,4,5,6),size=1000,replace=TRUE, prob=c(1/7,1/7,1/7,1/7,1/7,2/7))
+suma <- NULL
+for (i in 1:1000){
+  resultados_uno <- muestra_dados1[i]
+  resultados_seis <- muestra_dados6[i]
+  suma[i] <- resultados_uno + resultados_seis
+}
+# Crear un dataframe con los datos
+data <- data.frame(Suma = suma)
+
+# Crear un histograma con proporciones
+ggplot(data, aes(x = Suma)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black", alpha = 0.7, aes(y = after_stat(density))) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) + 
+  # Mostrar el eje y como porcentaje
+  labs(title = "Histograma de la suma de resultados de dados",
+       x = "Suma",
+       y = "Proporción")
