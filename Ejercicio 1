@@ -7,3 +7,44 @@
 Exponencial<-function(lambda){
   paste(-lambda*log(1-runif(1)))
 }
+#Ejercicio 1
+
+# Función para comprobar la propiedad de falta de memoria
+
+perdida_memoria <- function(n_repeticiones,t,s,escala){
+  datos <- rexp(n_repeticiones, rate = escala)
+  datos_t <- subset(datos, datos > t)
+  prob_condicional <- mean(datos_t > t+s)
+  prob_s <- mean(datos > s)
+  falta_de_memoria <- round(prob_condicional, 3) == round(prob_s, 3)
+  cat("Probabilidad (X > t + s | X > t):", round(prob_condicional, 6), "\n")
+  cat("Probabilidad (X > s):", round(prob_s, 6), "\n")
+  cat("Falta de memoria:", falta_de_memoria, "\n")
+  return(falta_de_memoria)
+}
+perdida_memoria(10000000, 3,2,.5)
+
+--
+  
+#Ejercicio 2
+
+set.seed(2)
+lanzamientos <- sample(c('Aguila','Sol'), size=1000, replace = TRUE)
+r_n<- NULL
+for (n in 1:1000) {
+  resultados_n <- lanzamientos[1:n]
+  # Calcular r/n y almacenar en r_n
+  r_n[n] <- sum(resultados_n == "Sol") / n
+}
+plot(1:1000, r_n, type = "l", col = "blue", xlab = "n", ylab = "r/n",
+     main = "Gráfico de soles/n vs n", ylim = c(0,1))
+
+abline(h = 0.5, col = "red", lty = 1)
+dif_r_n <- NULL
+for (i in 1:1000) {
+  resultados_i <- lanzamientos[1:i]
+  dif_r_n[i] <- 2 * sum(resultados_i == "Sol") - i
+}
+plot(1:1000, dif_r_n, type = "l", col = "red", xlab = "n", ylab = "(2r - n)",
+     main = "Gráfico de (2r - n) vs n")
+abline(h = 0, col = "blue", lty = 1)
