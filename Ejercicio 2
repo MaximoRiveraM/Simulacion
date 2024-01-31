@@ -1,1 +1,22 @@
+#Ejercicio 2
 
+set.seed(5)
+lanzamientos <- sample(c('Aguila','Sol'), size=1000, replace = TRUE)
+r_n<- NULL
+for (n in 1:1000) {
+  resultados_n <- lanzamientos[1:n]
+  # Calcular r/n y almacenar en r_n
+  r_n[n] <- sum(resultados_n == "Sol") / n
+}
+plot(1:1000, r_n, type = "l", col = "blue", xlab = "n", ylab = "r/n",
+     main = "Gráfico de soles/n vs n", ylim = c(0,1))
+
+abline(h = 0.5, col = "red", lty = 1)
+dif_r_n <- NULL
+for (i in 1:1000) {
+  resultados_i <- lanzamientos[1:i]
+  dif_r_n[i] <- 2 * sum(resultados_i == "Sol") - i
+}
+plot(1:1000, dif_r_n, type = "l", col = "red", xlab = "n", ylab = "(2r - n)",
+     main = "Gráfico de (2r - n) vs n")
+abline(h = 0, col = "blue", lty = 1)
