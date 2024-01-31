@@ -1,1 +1,8 @@
 
+cuadrado_medio <- function(z){
+  if (0<=z &  z<=9999){
+    z<- (z-(z%%10))/10
+    r <- z%%100
+  }
+  paste(r^2)
+}
