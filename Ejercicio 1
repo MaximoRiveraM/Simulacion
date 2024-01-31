@@ -7,3 +7,15 @@
 Exponencial<-function(lambda){
   paste(-lambda*log(1-runif(1)))
 }
+perdida_memoria <- function(n_repeticiones,t,s,escala){
+  datos <- rexp(n_repeticiones, rate = escala)
+  datos_t <- subset(datos, datos > t)
+  prob_condicional <- mean(datos_t > t+s)
+  prob_s <- mean(datos > s)
+  falta_de_memoria <- round(prob_condicional, 3) == round(prob_s, 3)
+  cat("Probabilidad (X > t + s | X > t):", round(prob_condicional, 6), "\n")
+  cat("Probabilidad (X > s):", round(prob_s, 6), "\n")
+  cat("Falta de memoria:", falta_de_memoria, "\n")
+  return(falta_de_memoria)
+}
+perdida_memoria(10000000, 3,2,.5)
