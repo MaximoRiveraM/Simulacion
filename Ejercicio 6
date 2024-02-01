@@ -1,4 +1,3 @@
-
 cuadrado_medio <- function(z){
   if (0<=z &  z<=9999){
     z<- (z-(z%%10))/10
@@ -6,21 +5,25 @@ cuadrado_medio <- function(z){
   }
   paste(r^2)
 }
-while (is.null(z_n) ||  !any(duplicated(z_n))) {
-  print(as.numeric(tail(z_n , 1)))
-  z_n <- append(z_n,cuadrado_medio(as.numeric(tail(z_n , 1))))
 
-
-}
-z_n <- c(55)
-c_dec<-c()
+c_dec<- as.list(NULL)
 for (i in 1:99 ){
   z_n <-c(10*i)
   while (is.null(z_n) ||  !any(duplicated(z_n))) {
-    print(as.numeric(tail(z_n , 1)))
     z_n <- append(z_n,cuadrado_medio(as.numeric(tail(z_n , 1))))
-    
   }
-  c_dec <- append(c_dec,z_n)
+  c_dec[[i]] <- z_n
 }  
+
+medio <- function(z){
+  if (0<=z &  z<=9999){
+    z<- (z-(z%%10))/10
+    r <- z%%100}
+  paste(r)
+}
+for(x in 1:length(c_dec)){
+  for (y in 1:length(c_dec[[x]])){
+    c_dec[[x]][y]<- medio(as.numeric(c_dec[[x]][y]))
+  }
+}
 print(c_dec)
