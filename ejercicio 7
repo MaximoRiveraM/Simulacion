@@ -17,3 +17,33 @@ ggplot(data, aes(x = Suma)) +
   labs(title = "Histograma de la suma de resultados de dados",
        x = "Suma",
        y = "Proporción")
+
+
+library(ggplot2)
+
+
+prob_dado1 <- c(2/7, 1/7, 1/7, 1/7, 1/7, 1/7)
+prob_dado2 <- c(1/7, 1/7, 1/7, 1/7, 1/7, 2/7)
+
+prob_sumas <- rep(0, 11)
+
+for (i in 1:6) {
+  for (j in 1:6) {
+    suma <- i + j
+    prob_sumas[suma - 1] <- prob_sumas[suma - 1] + prob_dado1[i] * prob_dado2[j]
+  }
+}
+
+for (s in 2:12) {
+  cat(paste("P(s =", s, ") =", prob_sumas[s - 1], "\n"))
+}
+total_prob <- sum(prob_sumas)
+cat(paste("\nSuma total de probabilidades =", total_prob, "\n"))
+
+df <- data.frame(Suma = 2:12, Probabilidad = prob_sumas)
+ggplot(df, aes(x = Suma, y = Probabilidad)) +
+  geom_bar(stat = "identity", fill = "blue", color = "black") +
+  labs(title = "Probabilidades de la suma de dos dados",
+       x = "Suma",
+       y = "Probabilidad") +
+  theme_minimal()
