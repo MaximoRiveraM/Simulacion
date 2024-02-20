@@ -1,0 +1,14 @@
+Epanech <- function(){
+  U <- runif(3,-1,1)
+  if ((abs(U[3])>= abs(U[2])) & (abs(U[3])>= abs(U[2]))){
+    V=U[2]
+  }else{
+    V=U[3]
+  }
+  return(V)
+}
+W<-c()
+for (i in 1:1000){
+  W<-append(W,Epanech())
+}
+hist(W)
