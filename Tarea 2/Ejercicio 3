@@ -1,0 +1,33 @@
+x <- c(0,1,2,3,4)
+p_x <- c(0.1, 0.2, 0.2, 0.2, 0.3)
+
+proncumulada <- cumsum(p_x)
+tamamuestra<- 1000
+numsaleatorios <- runif(tamamuestra)
+muestradex <- NULL
+
+for(i in 1:tamamuestra){
+  muestradex[i] <- x[which.min(numsaleatorios[i] >= proncumulada )]
+}
+
+
+tabla_frec_rel <- table(muestradex) / length(muestradex)
+tabla_frec_rel
+# Calcular probabilidades teóricas
+prob_teóricas <- p_x
+
+# Crear un vector de etiquetas para los valores x
+etiquetas_x <- paste("x =", x)
+
+# Graficar la tabla de frecuencias relativas y las probabilidades teóricas
+barplot(tabla_frec_rel, ylim = c(0, max(c(tabla_frec_rel, prob_teóricas))), 
+        names.arg = etiquetas_x, col = "lightblue", 
+        main = "Tabla de frecuencias relativas vs. Probabilidades teóricas",
+        xlab = "Valores de la variable aleatoria", ylab = "Frecuencia relativa / Probabilidad")
+
+# Agregar las probabilidades teóricas al gráfico
+barplot(prob_teóricas, col = "red", add = TRUE, density = 20, angle=45)
+
+# Agregar leyenda
+legend("topleft", legend = c("Frecuencia relativa", "Probabilidad teórica"), 
+       col = c("lightblue", "red"), pch = c(15, 19), bty = "n")
