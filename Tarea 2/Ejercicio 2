@@ -1,0 +1,49 @@
+rpareto <- function(n){
+  x<- 1/sqrt(1-runif(n))
+}# me da una muestra de tamaño n con distribucion pareto
+
+dpareto <- function(x){
+  if(x>=1){
+    y<- 2/x^3
+  }
+  else{
+    y<-0
+  }
+  return(y)
+}
+
+qpareto <- function(p){
+  if( 0<=p & p<=1){
+    x<- 1/sqrt(1-p)
+  }
+  else{
+    x<- 0
+  }
+  return(x)
+}
+ppareto <- function(x){
+  if( x>= 1){
+    p <- 1- (1/x^2)
+  }
+  else{
+    p <- 0
+  }
+  return(p)
+}
+
+x <- seq(1, 15, length.out = 100)
+pdf_values <- NULL
+cdf_values <- NULL
+# Calcular los valores de la función de densidad de probabilidad (pdf) y probabilidad acumulada (cdf)
+for(i in seq_along(x)){
+  pdf_values[i]<- dpareto(x[i])
+  cdf_values[i]<- ppareto(x[i])
+}
+
+# Graficar la función de densidad de probabilidad (pdf)
+plot(x, pdf_values, type = "l", xlab = "x", ylab = "f(x)", 
+     main = "Función de densidad de probabilidad (pdf) de la distribución Pareto estándar")
+
+# Graficar la función de probabilidad acumulada (cdf)
+plot(x, cdf_values, type = "l", xlab = "x", ylab = "F(x)", 
+     main = "Función de probabilidad acumulada (cdf) de la distribución Pareto estándar")
