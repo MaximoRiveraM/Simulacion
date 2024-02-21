@@ -1,0 +1,50 @@
+resultado <- NULL
+
+a <- 0  
+b <- 1
+
+set.seed(999)
+variables_aleatorias <- runif(10000, a, b)
+
+
+probabilidades<- NULL
+probabilidades[1] = 0
+a = 0
+for (i in 1:100){
+  
+  
+  a =a +2*i/(100*101)
+  probabilidades[i+1] = a
+}
+
+
+library(ggplot2)
+
+intervalos <- cut(variables_aleatorias, breaks = probabilidades)
+
+conteo_intervalos <- table(intervalos)
+
+frecuencias <- as.vector(conteo_intervalos)
+
+vector_resultado <- NULL
+for (i in 1:length(frecuencias)) {
+  vector_resultado <- c(vector_resultado, rep(i, frecuencias[i]))
+}
+
+
+# Inicializar el vector vacío para almacenar los valores de a
+a <- numeric(100)
+
+# Calcular los valores de a
+for (i in 0:100) {
+  a[i+1] <- a + 2 * i / (100 * 101)
+}
+
+# Graficar la función
+plot(a, type = "l", xlab = "i", ylab = "a", main = "Comparación de la muestra vs grafica de la funcion")
+lines(frecuencias/10000, type = "l", col = "red")
+
+# Agregar leyenda
+legend("topright", legend = c("Función a", "Frecuencias"), col = c("black", "red"), lty = 1)
+#muestra de 10k elementos
+vector_resultado
