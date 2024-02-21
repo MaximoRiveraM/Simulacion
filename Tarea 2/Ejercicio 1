@@ -1,0 +1,72 @@
+muestra_cauchy <-function(n){
+  x <- tan(pi*(runif(n)-0.5))
+  return(x)
+}
+mediasCauchy <- NULL
+tamaño_muestraCauchy <- NULL
+for( i in 1: 100){
+  tamaño_muestraCauchy[i]<- 50*i
+  mediasCauchy[i]<- mean(muestra_cauchy(50*i))
+  cat("Tamaño de muestra:", tamaño_muestraCauchy[i], ", Media muestral:", mediasCauchy[i], "\n")
+}
+# Graficar tamaño de muestra vs. media muestral
+plot(tamaño_muestraCauchy, mediasCauchy, type = "l", xlab = "Tamaño de la muestra", ylab = "Media muestral", main = "Tamaño de muestra vs. Media muestral Cauchy")
+
+#Inciso B
+
+muestra_gumbel <- function(n){
+  x <- -log(-log(runif(n)))
+  return(x)
+}
+mediasGumbel <- NULL
+tamaño_muestraGumbel <- NULL
+for(i in 1:100){
+  tamaño_muestraGumbel[i]<- 50*i
+  mediasGumbel[i]<- mean(muestra_gumbel(50*i))
+  cat("Tamaño de muestra Gumbel:", tamaño_muestraGumbel[i], ", Media muestral Gumbel:", mediasGumbel[i], "\n")
+  
+}
+
+
+plot(tamaño_muestraGumbel, mediasGumbel, type = "l", xlab = "Tamaño de la muestra", ylab = "Media muestral", main = "Tamaño de muestra vs. Media muestral Gumbel")
+euler.gamma <- .5772
+abline(h = euler.gamma, col = "red")
+#Inciso B
+
+# Inciso C
+muestra_logistica <- function(n){
+  x <- -log((1/runif(n))-1)
+  return(x)
+}
+
+mediaslogis <- NULL
+tamaño_muestralogis <- NULL
+
+for( i in 1: 100){
+  tamaño_muestralogis[i]<- 50*i
+  mediaslogis[i]<- mean(muestra_logistica(50*i))
+  cat("Tamaño de muestra logistica:", tamaño_muestralogis[i], ", Media muestral logistica:", mediaslogis[i], "\n")
+}
+
+
+plot(tamaño_muestralogis, mediaslogis, type = "l", xlab = "Tamaño de la muestra", ylab = "Media muestral", main = "Tamaño de muestra vs. Media muestral Logistica")
+abline(h = 0, col = "red")
+
+#Inciso D
+
+rpareto <- function(n){
+  x<- 1/sqrt(1-runif(n))
+}
+
+mediaspar <- NULL
+tamaño_muestrapar <- NULL
+
+for( i in 1: 100){
+  tamaño_muestrapar[i]<- 50*i
+  mediaspar[i]<- mean(rpareto(50*i))
+  cat("Tamaño de muestra pareto:", tamaño_muestrapar[i], ", Media muestral pareto:", mediaspar[i], "\n")
+}
+
+
+plot(tamaño_muestrapar, mediaspar, type = "l", xlab = "Tamaño de la muestra", ylab = "Media muestral", main = "Tamaño de muestra vs. Media muestral Pareto")
+abline(h = 2, col = "red")
