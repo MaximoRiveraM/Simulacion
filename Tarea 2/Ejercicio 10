@@ -1,0 +1,12 @@
+costo_reclamos <- function(){
+  reclamos<-rbinom(1,1000,0.09245)
+  return(rgamma(1,7000*reclamos,1))
+}
+W<-0
+for(i in 1:10000){
+  if (costo_reclamos()>500000){
+    W<- W+1
+  }
+}
+print(W/10000)
+#Estimamos que hay una probabilidad del 99% que los reclamos excedan 500 000 pesos.
