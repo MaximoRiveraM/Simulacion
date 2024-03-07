@@ -1,0 +1,16 @@
+vec1 <- c(0.54, 0.73, 0.98, 0.11, 0.68)
+vec1ord <- sort(vec1)
+Dp <- max(1:length(vec1ord)/length(vec1ord)-vec1ord)
+Dp
+Dm <- max(vec1ord - 0:(length(vec1ord)-1)/length(vec1ord))
+Dm
+Dmax <- max(Dp,Dm)
+Dmax
+pval <- 2*exp(-2*length(vec1ord)*Dmax^2)
+pval
+Fn <- ecdf(vec1ord)
+summary(Fn)
+plot(Fn, main = "distribución empirica", xlim = c(0,1), ylim = c(0,1), pch = 16, cex = 0.5)
+sq <- seq(0, 1, length = 100)
+lines(sq, punif(sq), type = "s", col = "red", lwd = 1)
+ks.test(vec1ord,"punif")
