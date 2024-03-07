@@ -1,0 +1,85 @@
+# Establece la ruta de tu archivo txt
+ruta <- "C:\\Users\\Gabo\\Downloads\\digitos_pi.txt"
+library(tseries) 
+# Lee el archivo txt
+lineas <- readLines(ruta)
+
+caracteres <- unlist(strsplit(lineas, ""))
+
+# Convierte cada caracter en un número
+numeros <- as.numeric(caracteres)
+numeros
+# Imprime el vector de números
+print(numeros)
+windows()
+hist(numeros, 
+     breaks = seq(min(numeros)-0.5, max(numeros)+0.5, by = 1),
+     main = "Histograma de números en el archivo",
+     xlab = "Número",
+     ylab = "Frecuencia")
+# el histograma nos sugiere que la distribucion es uniforme 
+
+numeros_ordenados <- sort(numeros)
+
+# Calcula los huecos entre los números
+huecos <- diff(numeros_ordenados) - 1
+
+# Cuenta el número de huecos
+numero_huecos <- length(huecos)
+
+# Calcula la longitud media de los huecos
+longitud_media <- mean(huecos)
+
+# Calcula el estadístico de prueba
+estadistico_prueba <- (numero_huecos - 1) * (longitud_media - 1)
+
+# Calcula el p-valor (asumiendo distribución normal bajo H0)
+p_valor <- pnorm(estadistico_prueba)
+
+# Imprime los resultados
+cat("Número de huecos:", numero_huecos, "\n")
+cat("Longitud media de los huecos:", longitud_media, "\n")
+cat("Estadístico de prueba:", estadistico_prueba, "\n")
+cat("P-valor:", p_valor, "\n")
+
+# Función para contar las ocurrencias de cada combinación de dígitos en un grupo
+contar_combinaciones <- function(grupo) {
+  combinaciones <- c("AAAAA", "AAAAB", "AAABB", "AABBB", "ABBBB", "AAAAC", 
+                     "AAABC", "AABCC", "ABBCC", "ABCCC", "AAACD", "AABCD", 
+                     "ABBCD", "ABBDD", "ABCDD", "ABCDE")
+  ocurrencias <- sapply(combinaciones, function(combinacion) {
+    sum(grepl(combinacion, grupo))
+  })
+  return(ocurrencias)
+}
+
+# Divide la secuencia en grupos de 5 dígitos y cuenta las ocurrencias de cada combinación
+grupos <- split(numeros, (seq_along(numeros) - 1) %/% 5)
+ocurrencias_totales <- sapply(grupos, contar_combinaciones)
+
+# Calcula las frecuencias observadas
+frecuencias_obs <- colSums(ocurrencias_totales)
+
+# Frecuencias esperadas bajo la hipótesis de distribución uniforme
+frecuencias_esp <- rep(length(grupos) / length(ocurrencias_totales), length(ocurrencias_totales))
+
+# Realiza un test de chi-cuadrado para comparar las frecuencias observadas con las esperadas
+chi_cuadrado <- sum((frecuencias_obs - frecuencias_esp)^2 / frecuencias_esp)
+
+# Grados de libertad
+grados_libertad <- length(frecuencias_obs) - 1
+
+# Calcula el p-valor
+p_valor <- 1 - pchisq(chi_cuadrado, df = grados_libertad)
+
+# Imprime los resultados
+cat("Estadístico de Chi-cuadrado:", chi_cuadrado, "\n")
+cat("Grados de libertad:", grados_libertad, "\n")
+cat("P-valor:", p_valor, "\n")
+
+# de acuerdo a este test podemos notar que al parecer los datos son aleaotios (prueba de poker )
+
+resultado_rachas <- runs.test(numeros)
+
+# Imprimir los resultados
+print(resultado_rachas)
