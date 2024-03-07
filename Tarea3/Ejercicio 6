@@ -1,0 +1,22 @@
+
+install.packages("Rmpfr")
+library(Rmpfr)
+
+
+precision <- 10000
+
+
+e <- exp(mpfr(1, precBits = precision))
+
+e_str <- format(e, scientific = FALSE)
+e_numeric_vector <- as.numeric(unlist(strsplit(e_str, "")))
+
+
+print(e_numeric_vector[3:1000])
+resultado <- Box.test(e_numeric_vector, lag = 10, type = "Ljung-Box")
+
+print(resultado)
+
+#dado el resultado podemos decir que de acuerdo al p-value no existe evidencia 
+#suficiente para rechazar la hipotesis nula de que los residuos son independientes
+#esto sugiere que los datos siguen una distribucion uniforme 
