@@ -1,0 +1,20 @@
+library(randtoolbox)
+library(randtests)
+Decimales <- read.csv(file="https://apod.nasa.gov/htmltest/gifcity/e.1mil")
+Decimales <- Decimales[-(1:22),]
+Decimales <- c(Decimales)
+w <- str("")
+for (t in Decimales){
+  w<- paste(w,t)
+}
+q <-c()
+#este algoritmo es muy lento, no conozco otra manera de hacerlo...
+for (k in 1:nchar(w)){
+  q<- c(q,strtoi(substr(w,k,k),10L))
+}
+q <- q[!is.na(q)]
+hist(q)
+
+gap.test(q)
+poker.test(q,5)
+runs.test(q)
