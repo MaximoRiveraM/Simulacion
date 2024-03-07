@@ -1,0 +1,36 @@
+u <- c(0.41, 0.68, 0.89, 0.94, 0.74, 0.91, 0.55, 0.62, 0.36, 0.27,
+       0.19, 0.72, 0.75, 0.08, 0.54, 0.02, 0.01, 0.36, 0.16, 0.28,
+       0.18, 0.01, 0.95, 0.69, 0.18, 0.47, 0.23, 0.32, 0.82, 0.53,
+       0.31, 0.42, 0.73, 0.04, 0.83, 0.45, 0.13, 0.57, 0.63, 0.29)
+nrachas <- function(x){
+  n <- length(x)
+  signo <- x[-1] - x[-n]
+  n1 <- sum(signo < 0)
+  s <- ifelse(signo < 0, -1, 1)
+  R <- 1 + sum(s[-1] != s[-(n-1)]) #cuenta los cambios de signo
+  return(list(R=R, n1=n1, lambda=n1/length(x)))
+}
+res <- nrachas(u); res
+lambda <- res$lambda
+z <- (nrachas(u)$R - 2*length(u)*lambda*(1-lambda))/(2*sqrt(length(u)) * lambda * (1-lambda));z
+pnorm(z)      
+
+
+r <- function(n1,n2,r){
+  if(r<2 || r>n1+n2) error("r tiene que ser mayor a 1 o menor que la suma de n1 y n2")
+  if( r %% 2 ==0) {
+    sol <- 2*choose(n1-1,r/2-1)*choose(n2-1,r/2-1)/choose(n1+n2,n1)
+  } else {
+    sol <- (choose(n1-1,(r-1)/2)*choose(n2-1,(r-3)/2) +
+              choose(n1-1,(r-3)/2)*choose(n2-1,(r-1)/2))/choose(n1+n2,n1)
+  }
+  return(sol)
+}
+n1= 20
+n2=19
+for(i in 2:n1+n2){
+  vecuno <- sum(c(r(n1,n2,i)))
+}
+vecuno
+library(randtests)
+runs.test(u)
