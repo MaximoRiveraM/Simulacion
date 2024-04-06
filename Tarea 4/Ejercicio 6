@@ -1,0 +1,36 @@
+pdf_exponencial <- function(x, rate) {
+  return(rate * exp(-rate * x))
+}
+
+cdf_exponencial <- function(x, rate) {
+  return(1 - exp(-rate * x))
+}
+
+lambda <- 5  
+t <- 120     
+rate <- 1/40 
+
+p <- 1 / t * integrate(function(x) 1 - cdf_exponencial(x, rate), 0, t)$value
+
+num_simulaciones <- 1000  
+num_clientes <- numeric(num_simulaciones)  
+
+for (i in 1:num_simulaciones) {
+  num_arrivals <- rpois(1, lambda * t)
+  
+  num_clients_at_t <- sum(runif(num_arrivals) < p)
+  
+  num_clientes[i] <- num_clients_at_t
+}
+
+media_num_clientes <- mean(num_clientes)
+print(paste("Número esperado de clientes en el restaurante a las 2:00 pm:", media_num_clientes))
+library(ggplot2)
+
+ggplot() +
+  geom_histogram(aes(x = num_clientes), binwidth = 1, fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribución del número de clientes en el restaurante a las 2:00 pm",
+       x = "Número de clientes",
+       y = "Frecuencia") +
+  theme_minimal()
+
