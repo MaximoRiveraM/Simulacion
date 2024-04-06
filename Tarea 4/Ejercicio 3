@@ -1,0 +1,15 @@
+lambdat <- function(t){abs(sin(t))}
+poisson.no.homogeneo <- function(lambdat, n){
+  lambda <- 1
+  TT <- rexp(n,lambda)
+  a <- cumsum(TT)
+  u <- runif(n)
+  aa <- a[ u <= lambdat(a)/lambda]
+  Na <- 1:length(aa) 
+  plot(aa, Na, type= 's', xlab = 'Tiempo', ylab= 'N(t)',
+       main ='Simulación de un proceso Poisson no homogéneo',
+       sub= expression(lambda(t) == abs(sin(t))) )
+  return(list(epocas= aa, cuenta= Na))
+}
+poisson.no.homogeneo(lambdat, 50)
+
