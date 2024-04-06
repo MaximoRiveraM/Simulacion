@@ -1,0 +1,27 @@
+tasa_1 <- 3/24  
+tasa_2 <- 4/24  
+
+tasa_total <- tasa_1 + tasa_2
+
+shocks <- tasa_total * 8
+
+media <- shocks
+varianza <- shocks
+
+print(paste("Media:", media))
+print(paste("varianza", varianza))
+
+k <- 2
+
+probabilidad <- exp(-tasa_total) * (tasa_total^k) / factorial(k)
+
+print(paste("Probabilidad:", probabilidad))
+
+
+lambda_1 <- 3  
+p1 <- 0.011
+p2 <- 0.005
+
+lambda <- (lambda_1 * p1) + (lambda_2 * p2)
+
+print(paste("Parámetro:", lambda))
