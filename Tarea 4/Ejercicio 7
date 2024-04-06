@@ -1,0 +1,76 @@
+library(ggplot2)
+
+Bgeo <- function(n, TT, a, b, S0 = 1) {
+  dt <- TT / n 
+  S <- S0  
+  
+  for (i in 2:(n + 1)) {
+    S <- append(S, S[i - 1] * exp((a - b**2 / 2) * dt + b * sqrt(dt) * rnorm(1)))
+  }
+  
+  return(S)  
+}
+
+
+n <- 100 
+S0 <- 1  
+a<- -1/3
+b <-1/2
+n_trayectorias <- 10  
+resultados <- list()
+
+for (TT in 1:30) {
+  trayectorias <- replicate(n_trayectorias, Bgeo(n, TT, a, b, S0))
+  resultados[[as.character(TT)]] <- trayectorias
+}
+
+
+datos <- data.frame(
+  tiempo = rep(seq(0, 1, length.out = n + 1), n * n_trayectorias * 30),
+  valor = as.vector(do.call(cbind, resultados)),
+  TT = rep(rep(1:30, each = n_trayectorias), each = n + 1),
+  trayectoria = rep(1:(n * n_trayectorias * 30), each = n + 1)
+)
+
+
+ggplot(datos, aes(x = tiempo, y = valor, group = trayectoria, color = as.factor(TT))) +
+  geom_line() +
+  labs(x = "Tiempo", y = expression(S[t])) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+### MEdia de 30
+n <- 100 
+S0 <- 1  
+TT <- 30 
+a <- -1/3  
+b <- 1/2 
+n_trayectorias <- 10  
+
+
+trayectorias <- replicate(n_trayectorias, Bgeo(n, TT, a, b, S0))
+
+S_barra_30 <- mean(sapply(trayectorias, function(x) x[length(x)]))
+
+
+print(paste("S¯30 =", S_barra_30))
+
+
+### media de 100
+n <- 100 
+S0 <- 1  
+TT <- 30 
+a <- -1/3  
+b <- 1/2 
+n_trayectorias <- 100  
+
+
+trayectorias <- replicate(n_trayectorias, Bgeo(n, TT, a, b, S0))
+
+S_barra_30 <- mean(sapply(trayectorias, function(x) x[length(x)]))
+
+
+print(paste("S¯30 =", S_barra_30))
+
+#PARA N SUFICIENTEMENTE GRANDE SE ESPERARIA CONVERGENCIA 
