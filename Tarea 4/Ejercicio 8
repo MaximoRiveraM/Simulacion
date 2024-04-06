@@ -1,0 +1,18 @@
+S_0 <- 1
+meses=60000
+q <- rnorm(meses,0,1)
+S <- numeric(meses)
+logS <- numeric(meses)
+f <- numeric(meses)
+S[1]<- S_0
+for (k in (1:(meses-1))){
+  S[k+1] <- (S[k])*((121/120)+0.3*sqrt(1/12)*q[k])
+  logS[k+1] <- 12/(k+1)*log(S[k+1])
+  f[k+1] <- 12/(k)*(log(S[k+1])-0.0548241*(k)/12)^2
+}
+plot(S)
+plot(logS)
+plot(f)
+print(logS[60000])
+
+
