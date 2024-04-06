@@ -1,0 +1,19 @@
+
+simulate <- function(t, p) {
+  T <- cumsum(rgeom(1000, p))  
+  N <- sum(T <= t)  
+  return(N)
+}
+
+t <- 100  
+p <- 0.2  
+
+
+n_simulations <- 1000
+resultados <- replicate(n_simulations, simulate(t, p))
+
+
+E_N_t <- mean(resultados)
+
+
+print(paste("Estimación de E(N(t)):", E_N_t))
