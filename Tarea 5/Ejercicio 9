@@ -1,0 +1,38 @@
+  n <- 50   #tamaño muestra
+  m <- 2000 #muestras
+  
+  muestra_anti <- function(){
+    d <- runif(25)
+    e <-numeric(25)
+    for (i in 1:25){
+      e[i] <- 1-d[i]
+    }
+    r <- numeric(50)
+    for (i in 1:25){
+      r[i] <- log(qgamma(d[i],.5,.5))}
+    for (i in 26:50){
+      r[i] <- log(qgamma(e[i-25],.5,.5))
+    }
+    return(mean(r))
+  }
+  muestra_anti()
+  
+muestras <- numeric(2000)
+for(i in 1:2000){
+  muestras[i] <- muestra_anti()
+}
+var(muestras)
+
+muestra_importancia <- function(){
+  r <- rgamma(50,1,0.5)
+  v <- numeric(0)
+  for (i in 1:50){
+    v[i] <- sqrt(2/3.14159265)*log(r[i])/sqrt(r[i])
+  }
+  return(mean(v))
+}
+muestras <- numeric(2000)
+for(i in 1:2000){
+  muestras[i] <- muestra_importancia()
+}
+var(muestras)
