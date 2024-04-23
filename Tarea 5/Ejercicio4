@@ -1,0 +1,10 @@
+f <- function(x, y )exp((x+y)^2)
+n <- 10000
+X <- runif(n)
+X2 <- 1 - X1
+
+Y <- runif(n)
+Y2 <- 1 - X1
+mean((f(X,Y)+f(1-X, 1-Y))*.5)
+var((f(X,Y)+f(1-X, 1-Y))*.5)
+print((var((f(X,Y)+f(1-X, 1-Y))*.5)-var(f(X,Y)))/var(f(X,Y)))
