@@ -1,0 +1,74 @@
+# Ejercicio 1
+
+n_sim <- 10000
+n_selecciones <- 100
+
+probabilidades <- c(1,2,3,4,5) / 15
+
+L_valores <- numeric(n_sim)
+
+for(i in 1:n_sim){
+  
+  elements <- sample(1:5)  # Permutación aleatoria de los elementos
+  L_sum <- 0  # Inicializa la suma para esta simulación
+  
+  for(j in 1:n_selecciones){
+    selected <- sample(1:5, 1, prob = probabilidades)  # Selecciona un elemento con las probabilidades dadas
+    position <- which(elements == selected)  # Encuentra la posición del elemento seleccionado
+    L_sum <- L_sum + position  # Suma la posición al total
+    elements <- c(elements[position], elements[-position])  # Mueve el elemento seleccionado al frente
+  }
+  
+  L_valores[i] <- L_sum  # Almacena la suma de posiciones para esta simulación
+}
+
+E_L <- mean(L_valores)
+E_L
+
+# Ni es una donde es cuantas veces aparece la i-esima posicion no es mas que una variable
+# binomial con las probabilidadaes que aparecen de probabilidades y 100 experimentos
+# por lo que la esperanza de E[Ni]= 100 * probabilidades[i]
+E_N <- numeric(5)
+E_N <- 100*probabilidades
+E_N
+
+# Para calcular la esperanza de Y = suma i Ni modificamos el codigo
+n_sim <- 10000
+n_selecciones <- 100
+
+probabilidades <- c(1,2,3,4,5) / 15
+
+L_valores <- numeric(n_sim)
+Y_valores <- numeric(n_sim)
+for(i in 1:n_sim){
+  
+  elements <- sample(1:5)  # Permutación aleatoria de los elementos
+  L_sum <- 0  # Inicializa la suma para esta simulación
+  N_count <- numeric(5)
+  
+  for(j in 1:n_selecciones){
+    selected <- sample(1:5, 1, prob = probabilidades)  # Selecciona un elemento con las probabilidades dadas
+    position <- which(elements == selected)  # Encuentra la posición del elemento seleccionado
+    L_sum <- L_sum + position  # Suma la posición al total
+    N_count[selected] <- N_count[selected] + 1
+    elements <- c(elements[position], elements[-position])  # Mueve el elemento seleccionado al frente
+  }
+  
+  L_valores[i] <- L_sum  # Almacena la suma de posiciones para esta simulación
+  Y_valores[i] <- sum(1:5 * N_count)
+}
+
+correlation <- cor(Y_valores, L_valores)
+correlation
+E_L <- mean(L_valores)
+E_L
+
+# Ahora el inciso 4
+
+a<- lm(L_valores ~ Y_valores )$coef[2]
+
+L_mejor <- L_valores - a *(Y_valores - mean(Y_valores))
+c(media_original = mean(L_valores), var_original = var(L_valores))
+c(media_ajustada = mean(L_mejor), var_ajustada = var(L_mejor))
+reduccion_varianza <- 100 * (var(L_valores) - var(L_mejor)) / var(L_valores)
+reduccion_varianza
