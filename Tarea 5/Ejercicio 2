@@ -1,0 +1,26 @@
+# Set the number of simulations
+n_sim <- 100000
+
+# Generate random samples of X and Y
+X <- rexp(n_sim, rate = 1)  # Exponential with mean 1
+Y <- rexp(n_sim, rate = 0.5)  # Exponential with mean 2
+
+# Estimate P(X+Y > 4) using conditioning on X
+estimator <- mean(pexp(4 - X, rate = 0.5, lower.tail = FALSE))
+
+# Print the estimate
+print(estimator)
+
+
+# Set the number of simulations
+n_sim <- 100000
+
+# Generate random samples of X and Y
+X <- rexp(n_sim, rate = 1)  # Exponential with mean 1
+Y <- rexp(n_sim, rate = 0.5)  # Exponential with mean 2
+
+# Estimate P(X+Y > 4) using conditioning on Y
+estimator <- mean(pexp(4 - Y, rate = 1, lower.tail = FALSE))
+
+# Print the estimate
+print(estimator)
