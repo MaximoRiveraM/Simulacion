@@ -1,0 +1,94 @@
+n_sim <- 10000
+parametros_unif <- c(1, 2, 3, 1, 2)
+
+camino_corto <- function(parametros) {
+  U <- runif(length(parametros), min = 0, max = 1)
+  X <- U * parametros
+  camino_1 <- X[1] + X[4] 
+  camino_2 <- X[1] + X[3] + X[5]
+  camino_3 <- X[2] + X[3] + X[4]
+  camino_4 <- X[2] + X[5]
+  corto <- min(c(camino_1, camino_2, camino_3, camino_4))
+  return(corto)
+  
+ }
+montecarlocrudol <- function(camino_corto, parametros_unif, n_sim){
+  mins <- replicate(n_sim, camino_corto(parametros_unif))
+  montecarlo_ <- mean(mins)
+  tabla <- c(media_montecarlo = montecarlo_, var_montecarlo = var(mins))
+  return(tabla)
+}
+montecarlocrudol(camino_corto , parametros_unif, n_sim)
+
+# Para variables antiteticas
+camino_corto_antitetico <- function(parametros){
+  U <- runif(length(parametros), min = 0, max= 1)
+  V <- 1 - U
+  X <- U * parametros
+  Y <- V * parametros
+  
+  camino_X <- c(
+    X[1] + X[4], 
+    X[1] + X[3] + X[5],
+    X[2] + X[3] + X[4],
+    X[2] + X[5]
+  )
+  camino_Y <- c(
+    Y[1] + Y[4], 
+    Y[1] + Y[3] + Y[5],
+    Y[2] + Y[3] + Y[4],
+    Y[2] + Y[5]
+  )
+  corto <- (min(camino_X) + min(camino_Y))/2
+  
+  return(corto)
+}
+antiteticas <- function(camino_corto_antitetico, parametros_unif, n_sim){
+  mins <- replicate(n_sim, camino_corto_antitetico(parametros_unif))
+  antitetico <- mean(mins)
+  tabla <- c(media_antiteticas = antitetico, var_antitetico = var(mins))
+  return(tabla)
+}
+antiteticas(camino_corto_antitetico , parametros_unif, n_sim)
+
+# Ahora vamos por la variable de control
+
+
+camino_corto_control <- function( n_sim, parametros){
+  E_S <- (sum(parametros) / 2) 
+  estimaciones_H <- numeric(n_sim)
+  estimaciones_S <- numeric(n_sim)
+  for( i in 1:n_sim){
+    U <- runif(length(parametros), min = 0, max = 1)
+    X <- U * parametros
+    caminos <- c(
+      X[1] + X[4], 
+      X[1] + X[3] + X[5],
+      X[2] + X[3] + X[4],
+      X[2] + X[5]
+    )
+    H_X <- min(caminos)
+    S_X <- sum(X)
+    
+    estimaciones_H[i] <- H_X
+    estimaciones_S[i] <- S_X
+    
+  }
+  
+  cov_HS <- cov(estimaciones_H, estimaciones_S)
+  var_S <- var(estimaciones_S)
+  a <- cov_HS / var_S
+  
+  
+  estimacion <- mean(estimaciones_H - a * (estimaciones_S - E_S))
+  var_estimada <- var(estimaciones_H - a * (estimaciones_S - E_S))
+  return(c(estimacion, var_estimada))
+
+}
+
+tabla_control <- function(camino_corto_control , n_sim, parametros){
+  return(c(media_control = camino_corto_control(n_sim, parametros)[1],
+           var_control = camino_corto_control(n_sim, parametros)[2]))
+}
+
+tabla_control(camino_corto_control, n_sim, parametros_unif)
