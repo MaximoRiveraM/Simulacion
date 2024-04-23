@@ -1,0 +1,19 @@
+# Número de lanzamientos del dado
+n_lanzamientos <- 100
+
+# Media y varianza de un lanzamiento de un dado
+media_dado <- 3.5
+varianza_dado <- 35/12
+
+# Media y varianza de la suma de 100 lanzamientos de un dado
+media_suma <- n_lanzamientos * media_dado
+varianza_suma <- n_lanzamientos * varianza_dado
+
+# Valor de S para el cual queremos calcular la probabilidad
+S <- 380
+
+# Utilizar la desigualdad de Chebyshev para calcular una cota para P(S >= 380)
+cota <- varianza_suma / (S - media_suma)^2
+
+# Imprimir la cota
+print(cota)
