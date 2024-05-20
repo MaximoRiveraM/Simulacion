@@ -1,0 +1,25 @@
+# generador de muestras de animales
+
+n <- 1000 #tamaño de los animales
+animales <- 1:n
+riesgo_de_caer <- numeric(n)
+for (i in 1:n){
+  riesgo_de_caer[i] <- 1 #puede ser modificado al cambiar las hipotesis
+}
+
+muestra_captura <- function(animales,riesgo_de_caer,tamaño){
+  capturas <- numeric(length(animales))
+  while(sum(capturas) < tamaño){
+    for (i in animales){
+      if (capturas[i]==0){
+        capturas[i] <- rbinom(1,1,riesgo_de_caer[i]) 
+      }
+    }
+  }
+  v <- which(capturas==1)
+  v <- sample(v,tamaño,replace = FALSE)
+  return(v)
+}
+a<-muestra_captura(animales, riesgo_de_caer,100)
+b<-muestra_captura(animales, riesgo_de_caer,100)
+length(intersect(a,b))
