@@ -1,0 +1,17 @@
+muestra_muertes <- function(animales, riesgo_de_caer, tamaño, prob_muerte) {
+  muestra1 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  
+  mascara <- sample(c(0, 1), length(animales), replace = TRUE, prob = prob_muerte)
+  vivos_muertos <- t(animales) * mascara
+  vivos <- which(vivos_muertos != 0)
+  
+  if (length(vivos) < tamaño) {
+    stop("No hay suficientes animales vivos para la muestra.")
+  }
+  
+  muestra2 <- muestra_captura(vivos, riesgo_de_caer, tamaño)
+  
+  inter <- length(intersect(muestra1, muestra2))
+  return(inter)
+}
+muestra_muertes(animales, riesgo_de_caer, 100, c(0.05, 0.95))
