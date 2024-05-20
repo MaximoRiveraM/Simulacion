@@ -23,3 +23,16 @@ muestra_captura <- function(animales,riesgo_de_caer,tamaño){
 a<-muestra_captura(animales, riesgo_de_caer,100)
 b<-muestra_captura(animales, riesgo_de_caer,100)
 length(intersect(a,b))
+
+
+captura_recaptura <- function(N, n1, n2) {
+  muestra1 <- sample(1:N, n1, replace = FALSE)
+  peces_marcados <- muestra1
+  
+  muestra2 <- sample(1:N, n2, replace = FALSE)
+  peces_recapturados <- sum(muestra2 %in% peces_marcados)
+  
+  N_estimado <- (n1 * n2) / peces_recapturados
+  
+  return(N_estimado)
+}
