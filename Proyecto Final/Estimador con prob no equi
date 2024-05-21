@@ -1,0 +1,25 @@
+riesgo_de_caer_dist <- numeric(n)
+for (i in 1:n){
+  riesgo_de_caer[i] <- runif(1) #puede ser modificado al cambiar las hipotesis
+} 
+estimador <- function(animales , riesgo_de_caer_dist , tamaño){
+  a<-muestra_captura(animales, riesgo_de_caer,100)
+  b<-muestra_captura(animales, riesgo_de_caer,100)
+  A  <- length(a)
+  B <- length(b)
+  C <- length(intersect(a , b))
+  estimador  <- A*B / C
+  return(estimador)
+}
+
+estimador(animales, riesgo_de_caer_dist, 100)
+resultados <- replicate(1000, estimador(animales,riesgo_de_caer, 100))
+varianza <-NULL
+for (i in 2:length(resultados)) {
+  varianza[i] <- var(resultados[1:i])
+  
+}
+
+plot(varianza, col= 'red')
+hist(resultados, freq = FALSE, breaks = 100)
+abline(v = 1000, col = 'red')
