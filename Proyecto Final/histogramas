@@ -1,3 +1,12 @@
+# generador de muestras de animales
+set.seed(314)
+n <- 1000 #tamaño de los animales
+animales <- 1:n
+riesgo_de_caer <- numeric(n)
+for (i in 1:n){
+  riesgo_de_caer[i] <- 1 #puede ser modificado al cambiar las hipotesis
+}
+###FUNCION MUESTRAS
 muestra_captura <- function(animales,riesgo_de_caer,tamaño){
   capturas <- numeric(length(animales))
   while(sum(capturas) < tamaño){
@@ -12,6 +21,7 @@ muestra_captura <- function(animales,riesgo_de_caer,tamaño){
   return(v)
 }
 
+###POBLACION NORMAL
 estimador <- function(animales , riesgo_de_caer , tamaño){
   a<-muestra_captura(animales, riesgo_de_caer,100)
   b<-muestra_captura(animales, riesgo_de_caer,100)
@@ -24,6 +34,8 @@ estimador <- function(animales , riesgo_de_caer , tamaño){
 
 estimador(animales, riesgo_de_caer, 100)
 resultados <- replicate(1000, estimador(animales,riesgo_de_caer, 100))
+hist(resultados, freq = FALSE, breaks = 100)
+
 varianza <-NULL
 for (i in 2:length(resultados)) {
   varianza[i] <- var(resultados[1:i])
@@ -31,5 +43,105 @@ for (i in 2:length(resultados)) {
 }
 
 plot(varianza, col= 'red')
-hist(resultados, freq = FALSE)
+
+
+
 #lines(density(resultados), col= 'blue')
+
+###POBLACION CON MUERTE
+muestra_muertes <- function(animales, riesgo_de_caer, tamaño, prob_muerte) {
+  muestra1 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  A <- length(muestra1)
+  mascara <- sample(c(0, 1), length(animales), replace = TRUE, prob = prob_muerte)
+  vivos_muertos <- t(animales) * mascara
+  vivos <- which(vivos_muertos != 0)
+  
+  if (length(vivos) < tamaño) {
+    stop("No hay suficientes animales vivos para la muestra.")
+  }
+  
+  muestra2 <- muestra_captura(vivos, riesgo_de_caer, tamaño)
+  B <- length(muestra2)
+  inter <- length(intersect(muestra1, muestra2))
+  estimador <- (A* B)/inter
+  return(estimador)
+}
+
+muestra_muertes(animales, riesgo_de_caer, 100, c(0.05, 0.95))
+resultados <- replicate(1000, muestra_muertes(animales,riesgo_de_caer, 100, c(0.05, 0.95)))
+
+hist(resultados, breaks = 100, freq = FALSE)
+
+varianza <-NULL
+for (i in 2:length(resultados)) {
+  varianza2[i] <- var(resultados[1:i])
+  
+}
+plot(varianza2, col= 'red')
+
+summary(resultados)
+
+###ANIMALES RIESGO VARIABLE
+muestra_riesgo_variable <- function(animales, riesgo_de_caer, tamaño) {
+  muestra1 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  A <- length(muestra1)
+  for (i in muestra1){
+    riesgo_de_caer[i] <- .75 #puede ser modificado al cambiar las hipotesis
+  }
+  muestra2 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  B <- length(muestra2)
+  inter <- length(intersect(muestra1, muestra2))
+  estimador <- (A* B)/inter
+  return(estimador)
+}
+
+muestra_riesgo_variable(animales, riesgo_de_caer, 100)
+
+resultados <- replicate(1000, muestra_riesgo_variable(animales , riesgo_de_caer, 100))
+
+hist(resultados , breaks = 100)
+abline(v = 1000, col = "red", lwd = 2)
+
+varianza <-NULL
+for (i in 2:length(resultados)) {
+  varianza2[i] <- var(resultados[1:i])
+  
+}
+plot(varianza2, col= 'red')
+
+summary(resultados)
+
+###Animales se vuelven mansos
+riesgo_de_caer <- numeric(n)
+for (i in 1:n){
+  riesgo_de_caer[i] <- .5 #puede ser modificado al cambiar las hipotesis
+}
+
+muestra_animales_mansos <- function(animales, riesgo_de_caer, tamaño) {
+  muestra1 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  A <- length(muestra1)
+  for (i in muestra1){
+    riesgo_de_caer[i] <- .9 #puede ser modificado al cambiar las hipotesis
+  }
+  muestra2 <- muestra_captura(animales, riesgo_de_caer, tamaño)
+  B <- length(muestra2)
+  inter <- length(intersect(muestra1, muestra2))
+  estimador <- (A* B)/inter
+  return(estimador)
+}
+
+muestra_riesgo_variable(animales, riesgo_de_caer, 100)
+
+resultados <- replicate(1000, muestra_riesgo_variable(animales , riesgo_de_caer, 100))
+
+hist(resultados , breaks = 100)
+abline(v = 1000, col = "red", lwd = 2)
+
+varianza <-NULL
+for (i in 2:length(resultados)) {
+  varianza2[i] <- var(resultados[1:i])
+  
+}
+plot(varianza2, col= 'red')
+
+summary(resultados)
