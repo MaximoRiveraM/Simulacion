@@ -1,0 +1,56 @@
+set.seed(314)
+# generador de muestras de animales
+
+n <- 1000 #tamaño de los animales
+animales <- 1:n
+riesgo_de_caer <- numeric(n)
+for (i in 1:n){
+  riesgo_de_caer[i] <- 1 #puede ser modificado al cambiar las hipotesis
+}
+
+muestra_captura <- function(animales,riesgo_de_caer,tamaño){
+  capturas <- numeric(length(animales))
+  while(sum(capturas) < tamaño){
+    for (i in animales){
+      if (capturas[i]==0){
+        capturas[i] <- rbinom(1,1,riesgo_de_caer[i]) 
+      }
+    }
+  }
+  v <- which(capturas==1)
+  v <- sample(v,tamaño,replace = FALSE)
+  return(v)
+}
+rsimulacion <- function(k){ #k es el tamaño de la muestra
+  v <- numeric(k)
+  for (i in 1:k){
+    a<-muestra_captura(animales, riesgo_de_caer,100)
+    b<-muestra_captura(animales, riesgo_de_caer,100)
+    v[i]<-length(intersect(a,b))
+  }
+  return(v)
+}
+m<-rsimulacion(5000)
+O <- numeric(101)
+for(i in 0:100){
+  O[i+1] <- length(which(m==i))
+}
+E <- numeric(101)
+for (i in 0:100){
+  E[i+1]<- dhyper(i,100,900,100)*5000
+}
+Ei <-numeric(14)
+Oi <- numeric(14)
+Ei[1] <- sum(E[1:5])
+Oi[1] <- sum(O[1:5])
+for (i in 6:17){
+  Ei[i-4]<-E[i]
+  Oi[i-4]<-O[i]
+}
+Ei[14]<-sum(E[18:101])
+Oi[14]<-sum(O[18:101])
+X <-0
+for (i in 1:14){
+  X<-X+((Ei[i]-Oi[i])^2)/Ei[i]
+}
+1-pchisq(X,13)
