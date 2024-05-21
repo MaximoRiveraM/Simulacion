@@ -5,7 +5,7 @@ n <- 1000 #tamaño de los animales
 animales <- 1:n
 riesgo_de_caer <- numeric(n)
 for (i in 1:n){
-  riesgo_de_caer[i] <- 1 #puede ser modificado al cambiar las hipotesis
+  riesgo_de_caer[i] <- .5 #puede ser modificado al cambiar las hipotesis
 }
 
 muestra_captura <- function(animales,riesgo_de_caer,tamaño){
