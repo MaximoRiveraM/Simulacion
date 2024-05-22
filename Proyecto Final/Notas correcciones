@@ -1,0 +1,14 @@
+Sea X una variable aleatoria que se distribuye según una distribución hipergeométrica H(N,M,C) donde:
+
+X= número de elementos marcados en la segunda muestra,
+
+La distribución de probabilidad de esta distribución es:
+
+Foto
+
+Este hecho nos facilita el estudio de este modelo. Tenemos, en particular, la siguiente proposición:
+
+Proposición 1. En la distribución hipergeométrica H(N,M,C), conocidos el par (M, C), el estimador de máxima verosimilitud del tamaño poblacional N viene dado
+por la siguiente expresión:
+
+FOTO
